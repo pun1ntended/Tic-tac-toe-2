@@ -15,16 +15,20 @@ class Player
   def self.all
     @@player_profiles
   end 
+
   def stats
   	@stats = [:W => @wins,:L => @losses,:D => @draws]
   	puts stats
   end
+
   def win
   	@wins += 1
   end
+
   def lose
   	@losses +=1
   end
+  
   def draw
   	@draws +=1
   end
@@ -34,8 +38,10 @@ class Player
   # end
 end
 
+#################
 
 class Board
+
   @@board = Array.new(9, " ")
   
   def initialize
@@ -43,9 +49,6 @@ class Board
     #position = gets.strip
     @current_board = @@board
   end
-
-
-  
   
   def numbered_board
   	puts " 1 | 2 | 3 "
@@ -64,9 +67,14 @@ class Board
   end
 
 end
+
+################
+
 class ActualGame
+
 	attr_reader :current_player
-	def initialize
+	
+  def initialize
 		start_the_game			
 	end
 
@@ -138,13 +146,43 @@ end
 
 
 
-class GFlow
-	def initialize
-		Board.new
+class GameFlow
+	
+   @@board = Array.new(9, " ")
+
+  def initialize(player_icon, cpu_icon, board)
+		Board.new   # prints numbered board and a blank board
+    turn(board)
 
 	end
 
+  def move(board, location, current_player)
+    board[location] = current_player
+  end
+
+  def position_taken?(board, location)
+    board[location] != " " && board[location] != ""
+  end
+
+  def valid_move?(board, location)
+    location.between?(0,8) && !position_taken?(board, location)
+  end
+
+  def turn(board)
+    puts "Please enter 1-9:"
+    input = gets.strip
+    location = input.to_i-1
+    if valid_move?(board, location)
+      move(board, location)
+      display_board(board)
+    else
+      turn(board)
+    end
+  end
 end
+
+
+
 
 
 
