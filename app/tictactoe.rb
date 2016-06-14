@@ -35,6 +35,7 @@ class Player
 end
 
 
+
 class Board
   @@board = Array.new(9, " ")
   
@@ -71,24 +72,27 @@ class ActualGame
 	end
 
 	def start_the_game
+		@cpu = Player.new("CPU")
 		puts "Welcome to the matrix...I mean tic-tac-toe..."
 		puts "What is your name...for research purposes"
-		user_name = gets.chomp
+		user_name = gets.strip
 		@current_player ||= Player.new(user_name.capitalize)
 		puts "'Would you like to play a game?' - Jigsaw"
 		puts "X - You are X!"
 		puts "O - ... you guessed it! YOU'RE O!!"
 		puts "no - ... then why are you here?"
 		puts "exit - probably a good idea since it's a nice day outside."
-		@@user_input = gets.chomp
-		if @user_input == "exit".downcase
-			`exit`
-		elsif @user_input == "no".downcase
-			self.start_the_game
-		elsif "X".downcase
-			player_icon = "X"
-		elsif "O".downcase
-			player_icon = "O"
+		@@user_input = gets.strip
+		if @user_input == "X".downcase
+			player_icon = "X".downcase
+			cpu_icon = "O".downcase
+			GFlow.new(player_icon,cpu_icon)
+		else @user_input == "O".downcase
+			player_icon = "O".downcase
+			cpu_icon = "X".downcase
+			GFlow.new(player_icon,cpu_icon)
+
+		
 		end
 	end
 
@@ -139,14 +143,108 @@ end
 
 
 class GFlow
-	def initialize
-		Board.new
+	def initialize(player_icon,cpu_icon)
+		board = Board.new
+		
+
 
 	end
 
+	WIN_COMBINATIONS = [
+	  [0,1,2],
+	  [3,4,5],
+	  [6,7,8],
+	  [0,3,6],
+	  [1,4,7],
+	  [2,5,8],
+	  [0,4,8],
+	  [2,4,6]
+	]
+	​# => break into a general method, pass icon as an argument
+	def check_victory?(icon)
+	  WIN_COMBINATIONS.each do |win_combo|
+	  position_1 = board[win_combo[0]]
+	  position_2 = board[win_combo[1]]
+	  position_3 = board[win_combo[2]]
+	  position_1 && position_2 && position_3 == icon 
+
+	end
+	def won?(board)
+	  
+	 
+	end
+	  nil 
+	end
+	​
+	def full?(board)
+	  board.all? do |e|
+	    e == 'X' || e == 'O'
+	  end
+	end
+	​
+	def draw?(board)
+	  !won?(board) && full?(board)
+	end
+	​
+	def over?(board)
+	  won?(board) || draw?(board)
+	end
+	​
+	def winner(board)
+	  winner = won?(board)
+	  if winner
+	    return board[winner[0]]
+	  end
+	  nil
+	end
 end
 
-
+=begin
+WIN_COMBINATIONS = [
+  [0,1,2],
+  [3,4,5],
+  [6,7,8],
+  [0,3,6],
+  [1,4,7],
+  [2,5,8],
+  [0,4,8],
+  [2,4,6]
+]
+​
+def won?(board)
+  WIN_COMBINATIONS.each do |win_combo|
+  position_1 = board[win_combo[0]]
+  position_2 = board[win_combo[1]]
+  position_3 = board[win_combo[2]]
+  if (position_1 == "X" && position_2 == "X" && position_3 == "X") || (position_1 == "O" && position_2 == "O" && position_3 == "O")
+    return win_combo
+  end
+end
+  nil 
+end
+​
+def full?(board)
+  board.all? do |e|
+    e == 'X' || e == 'O'
+  end
+end
+​
+def draw?(board)
+  !won?(board) && full?(board)
+end
+​
+def over?(board)
+  won?(board) || draw?(board)
+end
+​
+def winner(board)
+  winner = won?(board)
+  if winner
+    return board[winner[0]]
+  end
+  nil
+end
+=end
 
 
 
